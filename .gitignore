@@ -1,3 +1,6 @@
 chess.db
 vendor/*
 Gemfile.lock
+
+*.swp
+*.swo
