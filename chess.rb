@@ -105,12 +105,18 @@ post '/' do
                               miss: piece == nil})
 end
 
-post '/:id' do
+post '/move/:id' do
   moved = Piece.get(params[:id].to_i)
   x = params['cell'][0].to_i
   y = params['cell'][2].to_i
   
   moved.update(:x => x, :y => y)
   
+  redirect to('/')
+end
+
+post '/new_game' do
+  chess_init
+
   redirect to('/')
 end
