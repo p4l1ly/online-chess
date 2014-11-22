@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+    <% if miss %>
+      <script type="text/javascript">
+        alert("si slepy?")
+      </script>
+    <% end %>
+    
+    <style>
+      table.chess {
+        border: 3px solid black;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      table.chess td {
+        width: 50px;
+        height: 50px;
+        border: 3px solid black;
+      }
+
+      table.chess td.white {
+        background-color: white
+      }
+
+      table.chess td.black {
+        background-color: grey;
+      }
+      
+      table.chess td.yellow {
+        background-color: yellow;
+      }
+      
+      table.chess td input[type="submit"] {
+        background-color: Transparent;
+        background-repeat:no-repeat;
+        border: none;
+        cursor:pointer;
+        overflow: hidden;
+        outline:none;
+        width: 100%;
+        height: 100%;
+      }
+      
+      table.chess td input[type="image"] {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+
+    <table class="chess">
+      <% vypis.each_with_index do |row, i| %>
+        <tr>
+          <% row.each_with_index do |cell, j| %>
+            <% if selected != nil && selected.x == j && selected.y == i %>
+              <td class="yellow">
+            <% elsif cell %>
+              <td class="black">
+            <% else %>
+              <td class="white">
+            <% end %>
+              <% piece = nil %>
+              <% pieces.each do |p| %>
+                <% if p.x == j and p.y == i %>
+                  <% piece = p %>
+                <% end %>
+              <% end %>
+                
+                <% if selected != nil %>
+                  <form method="post" action="/<%= selected.id %>">
+                <% else %>
+                  <form method="post" action="/">
+                <% end %>
+                  <% if piece != nil %>
+                        <input type="hidden" name="cell"
+                                value="<%= j %>_<%= i %>" />
+                        <input type="image"
+                                src="<%= piece.type.path %>" />
+                  <% else %>
+                        <input type="submit" value="<%= j %>_<%= i %>" name="cell" />
+                  <% end %>
+                  </form>
+              </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+    
+  </body>
+</html>
