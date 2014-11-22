@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require './chessdesk'
+require './chess_move'
 require 'data_mapper'
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] ||
@@ -106,12 +107,18 @@ post '/' do
 end
 
 post '/move/:id' do
-  moved = Piece.get(params[:id].to_i)
+  selected = Piece.get(params[:id].to_i)
   x = params['cell'][0].to_i
   y = params['cell'][2].to_i
-  
-  moved.update(:x => x, :y => y)
-  
+
+  desk = [[nil].cycle.take(8)].cycle.take(8)
+
+  Piece.all.each do |p|
+    desk[p.y][p.x] = p
+  end
+
+  chess_move(desk, selected, [x, y])
+
   redirect to('/')
 end
 
